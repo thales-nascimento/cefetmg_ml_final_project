@@ -38,7 +38,8 @@ def run_correlator():
 
     #Sort by average correlation
     final_corr['avg_corr'] = final_corr.mean(axis=1)
-    final_corr.sort_values('avg_corr', ascending=False, inplace=True)
+    final_corr['abs_avg_corr'] = final_corr['avg_corr'].abs()
+    final_corr.sort_values('abs_avg_corr', ascending=False, inplace=True)
 
     return final_corr
 

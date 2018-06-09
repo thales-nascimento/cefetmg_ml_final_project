@@ -57,16 +57,18 @@ def do_logistic_regression(base_etf, df):
     classifier.fit(x_train, y_train)
     predicted = classifier.predict(x_test)
     probs = classifier.predict_proba(x_test)
-    print('accuracy:', metrics.accuracy_score(y_test, predicted))
-    print('precision:', metrics.precision_score(y_test, predicted))
-    print('recall:', metrics.recall_score(y_test, predicted))
-    print('f1:', metrics.f1_score(y_test, predicted))
+    return {
+        'accuracy': metrics.accuracy_score(y_test, predicted),
+        'precision': metrics.precision_score(y_test, predicted),
+        'recall': metrics.recall_score(y_test, predicted),
+        'f1': metrics.f1_score(y_test, predicted)
+    }
 
 
 def run_regression(companion_etfs=[]):
     base_etf = 'spy.us'
     df = prepare_dataframe(base_etf, companion_etfs, range(1,5))
-    do_logistic_regression(base_etf, df)
+    return do_logistic_regression(base_etf, df)
 
 
 if __name__ == "__main__":
