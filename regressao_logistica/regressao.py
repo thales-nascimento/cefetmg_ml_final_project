@@ -8,13 +8,8 @@ from sklearn.linear_model import LogisticRegression
 base_dir="../data/ETFs"
 usecols=["Open", "High", "Low", "Close"]
 
-def fill_missing_values(df):
-    """Fill missing values in data frame, in place."""
-    df.fillna(method='ffill', inplace=True)
-    df.fillna(method='bfill', inplace=True)
 
-
-def get_data(etf_list):
+def get_data(etf_list, usecols=usecols):
     df_final = None
     for etf in etf_list:
         f = os.path.join(base_dir, etf+'.txt')
@@ -26,6 +21,8 @@ def get_data(etf_list):
         else:
             df_final = df_final.join(df_temp, how='outer')
 
+    df_final.fillna(method='ffill', inplace=True)
+    df_final.fillna(method='bfill', inplace=True)
     return df_final
 
 
@@ -40,7 +37,6 @@ def plot_data(df, dias):
 def prepare_dataframe(base_etf, companion_etfs, pct_change_days):
     etf_list = [base_etf] + companion_etfs
     df = get_data(etf_list)
-    fill_missing_values(df)
 
     for etf in etf_list:
         for dias in pct_change_days:
@@ -79,7 +75,7 @@ def do_logistic_regression(base_etf, df):
     print('f1:', metrics.f1_score(y_test, predicted))
 
 
-def test_run():
+def run_regression():
     base_etf = 'spy.us'
     companion_etfs = []
     df = prepare_dataframe(base_etf, companion_etfs, range(1,5))
@@ -87,5 +83,5 @@ def test_run():
 
 
 if __name__ == "__main__":
-    test_run()
+    run_regression()
     plt.show();
