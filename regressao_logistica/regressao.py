@@ -6,6 +6,7 @@ from sklearn import metrics
 from sklearn.linear_model import LogisticRegression
 
 base_dir="../data/ETFs"
+usecols=["Open", "High", "Low", "Close"]
 
 def fill_missing_values(df):
     """Fill missing values in data frame, in place."""
@@ -17,8 +18,9 @@ def get_data(etf_list):
     df_final = None
     for etf in etf_list:
         f = os.path.join(base_dir, etf+'.txt')
-        df_temp = pandas.read_csv(f, parse_dates=True, index_col="Date", usecols=["Date", "Open","Close"], na_values=["nan"])
-        df_temp = df_temp.rename(columns={"Open": 'open_' + etf, "Close": 'close_' + etf})
+        df_temp = pandas.read_csv(f, parse_dates=True, index_col="Date", usecols=["Date"]+usecols, na_values=["nan"])
+        for col in usecols:
+            df_temp = df_temp.rename(columns={col: col+'_'+etf})
         if df_final is None:
             df_final = df_temp
         else:
@@ -42,10 +44,10 @@ def prepare_dataframe(base_etf, companion_etfs, pct_change_days):
 
     for etf in etf_list:
         for dias in pct_change_days:
-            df['pctchange_open_{}_{}'.format(dias,etf)] = df['open_' + etf].pct_change(dias)
-            df['pctchange_close_{}_{}'.format(dias,etf)] = df['close_' + etf].pct_change(dias)
+            for col in usecols:
+                df['pctchange_{}_{}_{}'.format(col,dias,etf)] = df['{}_{}'.format(col,etf)].pct_change(dias)
 
-    df['oraculo'] = df['open_' + base_etf].shift(-1) > df['open_' + base_etf]
+    df['oraculo'] = df['Open_' + base_etf].shift(-1) > df['Open_' + base_etf]
     df.dropna(inplace=True)
 
     #print(df)
@@ -80,7 +82,7 @@ def do_logistic_regression(base_etf, df):
 def test_run():
     base_etf = 'spy.us'
     companion_etfs = []
-    df = prepare_dataframe(base_etf, companion_etfs, range(4,5))
+    df = prepare_dataframe(base_etf, companion_etfs, range(1,5))
     do_logistic_regression(base_etf, df)
 
 
