@@ -1021,3 +1021,6 @@ for i,x in enumerate(pudim):
   max_rcl = (x['recall'], i)
  if x['f1'] > max_f1[0]:
   max_f1 = (x['f1'], i)
+
+print(pudim[max_acc[1]])
+print(pudim[max_f1[1]])
