@@ -42,9 +42,13 @@ def test_run():
     # Fill missing values
     fill_missing_values(df_data)
 
+    # Compute correlation
+    corr = df_data.corr()
+    print(corr)
+
     # Plot
     plot_data(df_data)
-    
-    
+
+
 if __name__ == "__main__":
     test_run()
