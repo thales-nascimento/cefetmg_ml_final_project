@@ -12,7 +12,6 @@ def run_regression_with_companions(first,last):
 
 
 if __name__ == "__main__":
-    import sys
     for q in range(1,11):
         for first in range(20):
             run_regression_with_companions(first,first+q)
