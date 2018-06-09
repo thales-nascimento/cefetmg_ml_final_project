@@ -32,12 +32,10 @@ def run_correlator():
         else:
             final_corr[index] = corr.values
 
-
     #Sort by average correlation
     final_corr['avg_corr'] = final_corr.mean(axis=1)
     final_corr = final_corr.sort_values('avg_corr', ascending=False)
     print(final_corr)
-
 
 
 if __name__ == "__main__":

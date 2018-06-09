@@ -1,5 +1,4 @@
 import pandas
-import matplotlib.pyplot as plt
 import os
 import sklearn
 from sklearn import metrics
@@ -26,14 +25,6 @@ def get_data(etf_list, usecols=usecols):
     return df_final
 
 
-def plot_data(df, dias):
-    ax = df.plot(title="Variação percentual de preços (dias = {})".format(dias), fontsize=8)
-    ax.set_xlabel("Data")
-    ax.set_ylabel("Preço")
-    ax.legend().set_visible(False)
-    plt.show(block=False)
-
-
 def prepare_dataframe(base_etf, companion_etfs, pct_change_days):
     etf_list = [base_etf] + companion_etfs
     df = get_data(etf_list)
@@ -45,9 +36,6 @@ def prepare_dataframe(base_etf, companion_etfs, pct_change_days):
 
     df['oraculo'] = df['Open_' + base_etf].shift(-1) > df['Open_' + base_etf]
     df.dropna(inplace=True)
-
-    #print(df)
-    #plot_data(df['pctchange'], dias)
 
     return df
 
@@ -84,4 +72,3 @@ def run_regression():
 
 if __name__ == "__main__":
     run_regression()
-    plt.show();
