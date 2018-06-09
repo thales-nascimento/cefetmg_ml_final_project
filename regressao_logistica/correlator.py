@@ -2,10 +2,13 @@ import pandas
 import os
 import regression
 from regression import *
+from functools import lru_cache
+
 
 regression.usecols=["Open", "High", "Low", "Close"] # redefine usecols
 
 
+@lru_cache(1)
 def run_correlator():
     base_etf = 'spy.us'
     etf_list = [x[:x.rfind(".")] for x in os.listdir(base_dir)]
@@ -35,9 +38,11 @@ def run_correlator():
 
     #Sort by average correlation
     final_corr['avg_corr'] = final_corr.mean(axis=1)
-    final_corr = final_corr.sort_values('avg_corr', ascending=False)
-    print(final_corr)
+    final_corr.sort_values('avg_corr', ascending=False, inplace=True)
+
+    return final_corr
 
 
 if __name__ == "__main__":
-    run_correlator()
+    corr = run_correlator()
+    print(run_correlator)
