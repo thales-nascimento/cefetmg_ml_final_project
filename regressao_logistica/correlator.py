@@ -1,15 +1,16 @@
 import pandas
 import os
-from regressao import *
+import regression
+from regression import *
 
-usecols=["Open", "High", "Low", "Close"] # redefine usecols
+regression.usecols=["Open", "High", "Low", "Close"] # redefine usecols
 
 
 def run_correlator():
     base_etf = 'spy.us'
     etf_list = [x[:x.rfind(".")] for x in os.listdir(base_dir)]
 
-    df = get_data(etf_list, usecols)
+    df = get_data(etf_list)
     final_corr = None
 
     for col in usecols:
